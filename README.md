@@ -182,11 +182,13 @@ Since `:` and `.` cannot be used in JSX attribute names, `$` must be substituted
 
 For key modifiers, the separator should be omitted.
 
-```js
-// Vue<span></span>.js:
+> **Vue<span></span>.js:**
+```html
 <input v-on:keyup.13.prevent="submit" />
+```
 
-//babel-preset-react-vue-directives:
+> **babel-preset-react-vue-directives:**
+```js
 <input vOn$keyup13$prevent="submit" />
 ```
 
