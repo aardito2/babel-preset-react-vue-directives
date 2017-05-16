@@ -1,0 +1,17 @@
+{
+	"extends": "airbnb",
+	"parser": "babel-eslint",
+	"plugins": [
+		"react"
+	],
+	"rules": {
+		"no-tabs": 0,
+		"indent": ["error", "tab", { "SwitchCase": 1 }],
+		"no-use-before-define": ["error", "nofunc"],
+		"no-underscore-dangle": 0,
+		"no-param-reassign": 0,
+		"no-plusplus": ["error", { "allowForLoopAfterthoughts": true }],
+		"no-console": ["error", { allow: ["warn", "error"] }],
+		"no-bitwise": ["error", { "allow": ["~"] }]
+	}
+}
