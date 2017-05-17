@@ -1,24 +1,7 @@
-import syntaxJsx from 'babel-plugin-syntax-jsx';
-import parseCondition from './parseCondition';
+import { createTernary } from './helpers';
+import parseCondition from '../shared/parseCondition';
 
-export default function ({ types: t }) {
-	return {
-		inherits: syntaxJsx,
-		visitor: {
-			JSXElement(path) {
-				if (path.node.openingElement.attributes.length) {
-					const vIf = path.node.openingElement.attributes.find(attr => attr.name.name === 'vIf');
-
-					if (vIf && t.isStringLiteral(vIf.value)) {
-						handleVIf(t, path, vIf);
-					}
-				}
-			},
-		},
-	};
-}
-
-export function handleVIf(t, path, vIf) {
+export default function handleVIf(t, path, vIf) {
 	if (path.type !== 'JSXElement') {
 		return;
 	}
@@ -105,34 +88,5 @@ export function handleVIf(t, path, vIf) {
 
 		path.parentPath.node.children = path.container;
 	}
-}
-
-function createTernary(t, elseIfs, else_) {
-	if (!elseIfs.length && !else_) {
-		return t.NullLiteral();
-	} else if (!elseIfs.length) {
-		else_.openingElement.attributes = else_.openingElement.attributes.filter(attr => attr.name.name !== 'vElse');
-		return else_;
-	}
-
-	const condition = getElseIfCondition(elseIfs[0], t);
-
-	elseIfs[0].openingElement.attributes = elseIfs[0].openingElement.attributes.filter(attr => attr.name.name !== 'vElseIf');
-
-	return t.ConditionalExpression(
-		condition,
-		elseIfs[0],
-		createTernary(t, elseIfs.slice(1), else_),
-	);
-}
-
-function getElseIfCondition(node, t) {
-	const condAttr = node.openingElement.attributes.find(attr => attr.name.name === 'vElseIf');
-
-	if (!t.isStringLiteral(condAttr.value)) {
-		throw new Error('Invalid vElseIf condition');
-	}
-
-	return parseCondition(condAttr.value.value, t);
 }
 

@@ -1,23 +1,4 @@
-import syntaxJsx from 'babel-plugin-syntax-jsx';
-
-export default function ({ types: t }) {
-	return {
-		inherits: syntaxJsx,
-		visitor: {
-			JSXElement(path) {
-				if (path.node.openingElement.attributes.length) {
-					const vModel = path.node.openingElement.attributes.find(attr => attr.name.name === 'vModel');
-
-					if (vModel && t.isStringLiteral(vModel.value)) {
-						handleVModel(t, path, vModel);
-					}
-				}
-			},
-		},
-	};
-}
-
-function handleVModel(t, path, vModel) {
+export default function handleVModel(t, path, vModel) {
 	const type = path.node.openingElement.name.name;
 
 	let eventProp = 'value';

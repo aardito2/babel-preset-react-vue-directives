@@ -1,4 +1,3 @@
-import syntaxJsx from 'babel-plugin-syntax-jsx';
 import cloneDeep from 'lodash.clonedeep';
 
 const arrOrObjTemplate = template => template(`Array.isArray(COLLECTION) ? 
@@ -14,24 +13,7 @@ ELEMENT_OR_VALUE: COLLECTION[KEY],
 INDEX
 })).map(({ KEY, ELEMENT_OR_VALUE, INDEX }) => NODE_OBJ)`);
 
-export default function ({ types: t, template }) {
-	return {
-		inherits: syntaxJsx,
-		visitor: {
-			JSXElement(path) {
-				if (path.node.openingElement.attributes.length) {
-					const vFor = path.node.openingElement.attributes.find(attr => attr.name.name === 'vFor');
-
-					if (vFor && t.isStringLiteral(vFor.value)) {
-						handleVFor(t, path, vFor, template);
-					}
-				}
-			},
-		},
-	};
-}
-
-function handleVFor(t, path, vFor, template) {
+export default function handleVFor(t, path, vFor, template) {
 	const forVal = vFor.value.value;
 
 	let elementOrValue;

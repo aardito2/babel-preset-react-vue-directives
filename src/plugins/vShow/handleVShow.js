@@ -1,35 +1,7 @@
-import syntaxJsx from 'babel-plugin-syntax-jsx';
-import parseCondition from './parseCondition';
+import { createDisplayProp } from './helpers';
+import parseCondition from '../shared/parseCondition';
 
-export default function ({ types: t }) {
-	return {
-		inherits: syntaxJsx,
-		visitor: {
-			JSXElement(path) {
-				if (path.node.openingElement.attributes.length) {
-					const vShow = path.node.openingElement.attributes.find(attr => attr.name.name === 'vShow');
-
-					if (vShow && t.isStringLiteral(vShow.value)) {
-						handleVShow(t, path, vShow);
-					}
-				}
-			},
-		},
-	};
-}
-
-function createDisplayProp(condition, showValue, t) {
-	return t.ObjectProperty(
-		t.identifier('display'),
-		t.ConditionalExpression(
-			condition,
-			showValue,
-			t.StringLiteral('none'),
-		),
-	);
-}
-
-function handleVShow(t, path, vShow) {
+export default function handleVShow(t, path, vShow) {
 	const condition = parseCondition(vShow.value.value, t);
 
 	path.node.openingElement.attributes = path.node.openingElement.attributes
