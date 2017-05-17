@@ -50,7 +50,7 @@ require("babel-core").transform("code", {
 
 ## Changes from Vue<span></span>.js directives:
 
-Please note the following differences from Vue<span></span>.js (due to restrictions on JSX attribute names):
+Please note the following differences from Vue<span></span>.js:
 
 * All directives use camelCase instead of kebab-case.
 * vOn directive uses `$` as a separator rather than `:` and `.`
