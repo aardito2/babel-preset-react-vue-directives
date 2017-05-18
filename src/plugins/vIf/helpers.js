@@ -20,13 +20,9 @@ function createTernary(t, elseIfs, else_) {
 }
 
 function getElseIfCondition(node, t) {
-	const condAttr = node.openingElement.attributes.find(attr => attr.name.name === 'vElseIf');
+	const conditionAttribute = node.openingElement.attributes.find(attr => attr.name.name === 'vElseIf');
 
-	if (!t.isStringLiteral(condAttr.value)) {
-		throw new Error('Invalid vElseIf condition');
-	}
-
-	return parseCondition(condAttr.value.value, t);
+	return parseCondition(conditionAttribute, t);
 }
 
 export {

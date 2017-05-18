@@ -8,6 +8,7 @@ Refer to the [Vue.js docs](https://vuejs.org/v2/api/#Directives) for more inform
 * [Installation](#installation)
 * [Usage](#usage)
 * [Changes from Vue<span></span>.js directives](#changes-from-vue.js-directives)
+* [String literals vs expressions](#string-literals-vs-expressions)
 * [Supported directives](#supported-directives)
 * [Examples](#examples)
 * [`vFor`](#vfor)
@@ -56,6 +57,12 @@ Please note the following differences from Vue<span></span>.js:
 * vOn directive uses `$` as a separator rather than `:` and `.`
 * vOn only supports named functions.
 * vOn does not support the `self` and `once` event modifiers.
+
+## String literals vs expressions
+
+* vFor only supports string literals in the formats describes [below](#vfor).
+* vIf and vShow support both curly brace expressions and string literals. String literals can only contain identifiers.
+* vModel and vOn only support string literals containing an identifier. For vModel, this should be the name of a top-level property on `this.state`; for vOn it should be the name of an in-scope function.
 
 ### Supported directives:
 * `vFor`
@@ -129,7 +136,7 @@ As in Vue<span></span>.js, when using custom React elements, you will need to ex
 	<div vIf="condition">
 		Displays if condition is true
 	</div>
-	<div vElseIf="value > 5">
+	<div vElseIf={value > 5}>
 		Displays if value > 5
 	</div>
 	<div vElse>

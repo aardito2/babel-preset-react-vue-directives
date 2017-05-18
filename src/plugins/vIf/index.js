@@ -9,7 +9,9 @@ export default function ({ types: t }) {
 				if (path.node.openingElement.attributes.length) {
 					const vIf = path.node.openingElement.attributes.find(attr => attr.name.name === 'vIf');
 
-					if (vIf && t.isStringLiteral(vIf.value)) {
+					if (vIf && 
+						(t.isStringLiteral(vIf.value) ||
+							t.isJSXExpressionContainer(vIf.value))) {
 						handleVIf(t, path, vIf);
 					}
 				}

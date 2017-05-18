@@ -1,16 +1,11 @@
-import { parse } from 'babylon';
-
-export default function parseCondition(condition, t) {
-	const parsed = parse(condition).program.body;
-
-	if (parsed.length !== 1) {
-		throw new Error('Invalid condition');
+export default function parseCondition(conditionAttribute, t) {
+	let condition;
+	if (t.isStringLiteral(conditionAttribute.value)) {
+		condition = t.identifier(conditionAttribute.value.value);
+	} else if (t.isJSXExpressionContainer(conditionAttribute.value)) {
+		condition = conditionAttribute.value.expression;
 	}
 
-	if (!t.isExpressionStatement(parsed[0])) {
-		throw new Error('Invalid condition');
-	}
-
-	return parsed[0].expression;
+	return condition;
 }
 

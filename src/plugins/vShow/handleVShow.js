@@ -2,7 +2,7 @@ import { createDisplayProp } from './helpers';
 import parseCondition from '../shared/parseCondition';
 
 export default function handleVShow(t, path, vShow) {
-	const condition = parseCondition(vShow.value.value, t);
+	const condition = parseCondition(vShow, t);
 
 	path.node.openingElement.attributes = path.node.openingElement.attributes
 		.filter(attr => attr !== vShow);

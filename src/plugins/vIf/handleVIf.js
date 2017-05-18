@@ -7,7 +7,9 @@ export default function handleVIf(t, path, vIf) {
 	}
 
 	const { key, container } = path;
-	const condition = parseCondition(vIf.value.value, t);
+
+	const condition = parseCondition(vIf, t);
+
 	const elseIfs = [];
 	let else_;
 
