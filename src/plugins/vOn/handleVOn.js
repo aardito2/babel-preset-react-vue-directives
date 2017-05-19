@@ -5,31 +5,15 @@ import {
 	attributeVisitor,
 } from './helpers';
 import { unique } from '../shared/util';
+import errorVisitor from '../shared/errorVisitor';
 
 export default function handleVOn(t, path, vOn) {
-	let eventType;
-	let modifiers = [];
-
 	const attrName = vOn.name.name;
 	const firstSeparatorPos = attrName.indexOf('$');
-	if (firstSeparatorPos === -1 || firstSeparatorPos === attrName.length - 1) {
-		throw new Error('Invalid vOn attribute name');
-	}
+	const props = attrName.slice(firstSeparatorPos + 1).split('$');
 
-	let match;
-
-	const regex = /(\w+)(?:\$)?/g;
-	const attrNameSliced = attrName.slice(firstSeparatorPos + 1);
-
-	// eslint-disable-next-line no-cond-assign
-	while (match = regex.exec(attrNameSliced)) {
-		const [, param] = match;
-		if (!eventType) {
-			eventType = param;
-		} else {
-			modifiers.push(param);
-		}
-	}
+	let eventType = props[0];
+	let [...modifiers] = props.slice(1);
 
 	modifiers = unique(modifiers);
 
@@ -40,17 +24,14 @@ export default function handleVOn(t, path, vOn) {
 	}
 
 	if (!validateEventType(eventType)) {
-		console.warn('Invalid event type for vOn, skipping');
-		return;
+		return errorVisitor(vOn, path, 'JSXAttribute', 'Invalid event type');
 	}
 
 	for (let i = 0; i < modifiers.length; i++) {
 		const isValid = validateModifier(eventType, modifiers[i]);
 
 		if (!isValid) {
-			console.warn(`Invalid event modifier in vOn: ${modifiers[i]}, skipping`);
-			modifiers.splice(i, 1);
-			i -= 1;
+			return errorVisitor(vOn, path, 'JSXAttribute', 'Invalid event modifier');
 		}
 	}
 

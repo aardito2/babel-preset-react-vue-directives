@@ -9,8 +9,12 @@ export default function ({ types: t, template }) {
 				if (path.node.openingElement.attributes.length) {
 					const vFor = path.node.openingElement.attributes.find(attr => attr.name.name === 'vFor');
 
-					if (vFor && t.isStringLiteral(vFor.value)) {
-						handleVFor(t, path, vFor, template);
+					if (vFor) {
+						if (t.isStringLiteral(vFor.value)) {
+							handleVFor(t, path, vFor, template);
+						} else {
+							return path.buildCodeFrameError('Invalid vFor attribute value; expected string literal');
+						}
 					}
 				}
 			},

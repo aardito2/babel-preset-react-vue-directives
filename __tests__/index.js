@@ -14,13 +14,18 @@ describe('Vue directives in React', () => {
 			it(`should ${feature} ${caseName.split('-').join(' ')}`, () => {
 				const fixtureDir = path.join(fixturesDir, feature, caseName);
 				const actualPath = path.join(fixtureDir, 'actual.js');
-				const actual = transformFileSync(actualPath).code;
 
-				const expected = fs.readFileSync(
-					path.join(fixtureDir, 'expected.js')
-				).toString();
+				if (caseName.startsWith('throws')) {
+					expect(() => transformFileSync(actualPath)).toThrow();
+				} else {
+					const actual = transformFileSync(actualPath).code;
 
-				expect(trim(actual)).toEqual(trim(expected));
+					const expected = fs.readFileSync(
+						path.join(fixtureDir, 'expected.js')
+					).toString();
+
+					expect(trim(actual)).toEqual(trim(expected));
+				}
 			});
 		});
   });

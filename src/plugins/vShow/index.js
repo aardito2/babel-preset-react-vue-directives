@@ -9,11 +9,7 @@ export default function ({ types: t }) {
 				if (path.node.openingElement.attributes.length) {
 					const vShow = path.node.openingElement.attributes.find(attr => attr.name.name === 'vShow');
 
-					if (vShow && 
-						(t.isStringLiteral(vShow.value) ||
-							t.isJSXExpressionContainer(vShow.value))) {
-						handleVShow(t, path, vShow);
-					}
+					vShow && handleVShow(t, path, vShow);
 				}
 			},
 		},

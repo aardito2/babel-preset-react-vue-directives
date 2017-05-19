@@ -41,9 +41,8 @@ function replaceVOnAttribute(t, path, eventType, modifiers) {
 
 	let codeEventType = eventType[0].toUpperCase() + eventType.slice(1);
 
-	if (path.parentPath.node.attributes.find(attr => attr.name.name === codeEventType || attr.name.name === `on${codeEventType}`)) {
-		console.warn(`Node already has ${codeEventType} handler, skipping vOn`);
-		return;
+	if (path.parentPath.node.attributes.find(attr => attr.name.name === `on${codeEventType}`)) {
+		throw path.buildCodeFrameError(`Node already has ${codeEventType} handler`);
 	}
 
 	codeEventType = `on${codeEventType}`;
@@ -54,7 +53,6 @@ function replaceVOnAttribute(t, path, eventType, modifiers) {
 		codeEventType += 'Capture';
 	}
 
-	// let sourceString = `on${codeEventType}={(event) => { `;
 	let sourceString = 'event => {';
 
 	if (modifiers.includes('prevent')) {
