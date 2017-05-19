@@ -61,7 +61,7 @@ Please note the following differences from Vue<span></span>.js:
 
 ## String literals vs expressions
 
-* vFor only supports string literals in the formats describes [below](#vfor).
+* vFor only supports string literals in the formats described [below](#vfor).
 * vIf and vShow support both curly brace expressions and string literals. String literals can only contain identifiers.
 * vModel and vOn only support string literals containing an identifier. For vModel, this should be the name of a top-level property on `this.state`; for vOn it should be the name of an in-scope function.
 
