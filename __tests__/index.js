@@ -20,7 +20,7 @@ describe('Vue directives in React', () => {
 					path.join(fixtureDir, 'expected.js')
 				).toString();
 
-				assert.equal(trim(actual), trim(expected));
+				expect(trim(actual)).toEqual(trim(expected));
 			});
 		});
   });

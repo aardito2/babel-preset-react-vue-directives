@@ -1,3 +1,5 @@
+import createSetStateArg from './helpers';
+
 export default function handleVModel(t, path, vModel) {
 	const type = path.node.openingElement.name.name;
 
@@ -34,18 +36,7 @@ export default function handleVModel(t, path, vModel) {
 							t.ThisExpression(),
 							t.Identifier('setState'),
 						),
-						[t.ObjectExpression(
-							[t.ObjectProperty(
-								t.Identifier(vModel.value.value),
-								t.MemberExpression(
-									t.MemberExpression(
-										t.Identifier('event'),
-										t.Identifier('target'),
-									),
-									t.Identifier(eventProp),
-								),
-							)],
-						)],
+						[createSetStateArg(vModel.value.value, eventProp, t)]
 					),
 				),
 			),

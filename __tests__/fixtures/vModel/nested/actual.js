@@ -4,13 +4,19 @@ export default class InputTest extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			inputValue: ''
+			a: {
+				b: {
+					c: {
+						inputValue: ''
+					}
+				}
+			}
 		};
 	}
 
 	render() {
 		return (
-			<input vModel="inputValue" />
+			<input vModel="a.b.c.inputValue" />
 		);
 	}
 }

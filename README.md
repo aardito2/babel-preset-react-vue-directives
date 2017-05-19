@@ -57,6 +57,8 @@ Please note the following differences from Vue<span></span>.js:
 * vOn directive uses `$` as a separator rather than `:` and `.`
 * vOn only supports named functions.
 * vOn does not support the `self` and `once` event modifiers.
+* vModel does not support the `lazy`, `number`, and `trim` modifiers.
+* vModel supports binding to nested properties on state - see [below](#vmodel) for an example.
 
 ## String literals vs expressions
 
@@ -129,6 +131,8 @@ As in Vue<span></span>.js, when using custom React elements, you will need to ex
 
 ### [`vIf`](https://vuejs.org/v2/guide/conditional.html#v-if)
 
+Conditionally render components based on a condition.
+
 #### Example:
 
 ```js
@@ -178,6 +182,32 @@ Creates a two-way binding between a property on `this.state` and the value of a 
 ```
 
 The `<input />` element will become a controlled element, with its value linked to `this.state.inputValue`. When the input changes, `this.setState({ inputValue: event.target.value })` will be called.
+
+`vModel` also supports binding to nested properties on `this.state`:
+
+```js
+import React, { Component } from 'react';
+
+export default class NestedStateComponent extends component {
+	state = {
+		a: {
+			b: {
+				c: {
+					inputValue: ''
+				}
+			}
+		}
+	};
+
+	render() {
+		return (
+			<input vModel="a.b.c.inputValue" />
+		);
+	}
+}
+```
+
+The output code will use `Object.assign` as needed when calling `this.setState` to update the bound property.
 
 <hr style="border: none; height: 2px;"/>
 
