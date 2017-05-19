@@ -7,7 +7,7 @@ export default function ({ types: t }) {
 		visitor: {
 			JSXElement(path) {
 				if (path.node.openingElement.attributes.length) {
-					const vOn = path.node.openingElement.attributes.find(attr => attr.name.name.startsWith('vOn'));
+					const vOn = path.node.openingElement.attributes.find(attr => /^vOn(\$\w+)+$/.test(attr.name.name));
 
 					if (vOn && t.isStringLiteral(vOn.value)) {
 						handleVOn(t, path, vOn);

@@ -1,6 +1,11 @@
 import createSetStateArg from './helpers';
 
 export default function handleVModel(t, path, vModel) {
+	const name = vModel.name.name.split('$').slice(1);
+	const hasLazy = name.includes('lazy');
+	const hasNumber = name.includes('number');
+	const hasTrim = name.includes('trim');
+
 	const type = path.node.openingElement.name.name;
 
 	let eventProp = 'value';
@@ -8,6 +13,10 @@ export default function handleVModel(t, path, vModel) {
 
 	path.node.openingElement.attributes = path.node.openingElement.attributes
 		.filter(attr => attr !== vModel);
+
+	if (hasLazy) {
+		eventHandler = 'onChange';
+	}
 
 	if (type === 'input') {
 		const attr = path.node.openingElement.attributes.find(nodeAttr => nodeAttr.name.name === 'type');
@@ -36,7 +45,7 @@ export default function handleVModel(t, path, vModel) {
 							t.ThisExpression(),
 							t.Identifier('setState'),
 						),
-						[createSetStateArg(vModel.value.value, eventProp, t)]
+						[createSetStateArg(hasNumber, hasTrim, vModel.value.value, eventProp, t)]
 					),
 				),
 			),

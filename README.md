@@ -54,10 +54,9 @@ require("babel-core").transform("code", {
 Please note the following differences from Vue<span></span>.js:
 
 * All directives use camelCase instead of kebab-case.
-* vOn directive uses `$` as a separator rather than `:` and `.`
+* Directive modifiers use `$` as a separator rather than `:` and `.`.
 * vOn only supports named functions.
 * vOn does not support the `self` and `once` event modifiers.
-* vModel does not support the `lazy`, `number`, and `trim` modifiers.
 * vModel supports binding to nested properties on state - see [below](#vmodel) for an example.
 
 ## String literals vs expressions
@@ -208,6 +207,12 @@ export default class NestedStateComponent extends component {
 ```
 
 The output code will use `Object.assign` as needed when calling `this.setState` to update the bound property.
+
+`vModel` supports the `lazy`, `trim`, and `number` modifiers. As with `vOn`, `$` should be used as a separator rather than `.`:
+
+```js
+<input vModel$lazy$trim$number="value" />
+```
 
 <hr style="border: none; height: 2px;"/>
 

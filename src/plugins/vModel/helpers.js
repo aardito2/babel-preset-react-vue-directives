@@ -2,7 +2,36 @@ import { parse } from 'babylon';
 
 const stateTemplate = path => parse(`this.state${path ? '.' + path : ''}`).program.body[0].expression;
 
-export default function createSetStateArg(identifier, eventProp, t, path = '') {
+function createEventExpression(hasNumber, hasTrim, eventProp, t) {
+	let val = t.MemberExpression(
+		t.MemberExpression(
+			t.Identifier('event'),
+			t.Identifier('target'),
+		),
+		t.Identifier(eventProp)
+	);
+
+	if (hasTrim) {
+		val = t.CallExpression(
+			t.MemberExpression(
+				val,
+				t.Identifier('trim'),
+			),
+			[]
+		);
+	}
+
+	if (hasNumber) {
+		val = t.CallExpression(
+			t.Identifier('Number'),
+			[val]
+		);
+	}
+
+	return val;
+}
+
+export default function createSetStateArg(hasNumber, hasTrim, identifier, eventProp, t, path = '') {
 	let keys = identifier.split('.');
 
 	if (keys.length === 1 && path) {
@@ -18,13 +47,7 @@ export default function createSetStateArg(identifier, eventProp, t, path = '') {
 					[
 						t.ObjectProperty(
 							t.Identifier(keys[0]),
-							t.MemberExpression(
-								t.MemberExpression(
-									t.Identifier('event'),
-									t.Identifier('target'),
-								),
-								t.Identifier(eventProp),
-							),
+							createEventExpression(hasNumber, hasTrim, eventProp, t)
 						)
 					]
 				)
@@ -37,13 +60,7 @@ export default function createSetStateArg(identifier, eventProp, t, path = '') {
 			[
 				t.ObjectProperty(
 					t.Identifier(keys[0]),
-					t.MemberExpression(
-						t.MemberExpression(
-							t.Identifier('event'),
-							t.Identifier('target'),
-						),
-						t.Identifier(eventProp),
-					),
+					createEventExpression(hasNumber, hasTrim, eventProp, t)
 				)
 			],
 		);
@@ -61,7 +78,7 @@ export default function createSetStateArg(identifier, eventProp, t, path = '') {
 				[
 					t.ObjectProperty(
 						t.Identifier(keys[0]),
-						createSetStateArg(keys.slice(1).join('.'), eventProp, t, path ? `${path}.${keys[0]}` : keys[0])
+						createSetStateArg(hasNumber, hasTrim, keys.slice(1).join('.'), eventProp, t, path ? `${path}.${keys[0]}` : keys[0])
 					)
 				]
 			)
