@@ -55,15 +55,15 @@ Please note the following differences from Vue<span></span>.js:
 
 * All directives use camelCase instead of kebab-case.
 * Directive modifiers use `$` as a separator rather than `:` and `.`.
-* vOn only supports named functions.
-* vOn does not support the `self` and `once` event modifiers.
-* vModel supports binding to nested properties on state - see [below](#vmodel) for an example.
+* `vOn` only supports named functions.
+* `vOn` does not support the `self` and `once` event modifiers.
+* `vModel` supports binding to nested properties on state - see [below](#vmodel) for an example.
 
 ## String literals vs expressions
 
-* vFor only supports string literals in the formats described [below](#vfor).
-* vIf and vShow support both curly brace expressions and string literals. String literals can only contain identifiers.
-* vModel and vOn only support string literals containing an identifier. For vModel, this should be the name of a top-level property on `this.state`; for vOn it should be the name of an in-scope function.
+* `vFor` only supports string literals in the formats described [below](#vfor).
+* `vIf` and `vShow` support both curly brace expressions and string literals. String literals can only contain identifiers.
+* `vModel` and `vOn` only support string literals containing an identifier. For `vModel`, this should be the name of a top-level property on `this.state`; for `vOn` it should be the name of an in-scope function.
 
 ### Supported directives:
 * `vFor`
@@ -132,6 +132,8 @@ As in Vue<span></span>.js, when using custom React elements, you will need to ex
 
 Conditionally render components based on a condition.
 
+As noted [above](#string-literals-vs-expressions), `vIf` accepts both curly brace expressions and string literals. String literals can only contain identifiers.
+
 #### Example:
 
 ```js
@@ -155,6 +157,8 @@ Conditionally render components based on a condition.
 #### Example:
 
 Sets the `display` property of the element to `none` if the condition is false.
+
+As with `vIf`, `vShow` accepts both curly brace expressions and string literals. String literals can only contain identifiers.
 
 If the element already has a `display` property, it will be used when the condition is true.
 
@@ -222,7 +226,7 @@ Adds event handlers.
 
 Since `:` and `.` cannot be used in JSX attribute names, `$` must be substituted for both.
 
-For key modifiers, the separator should be omitted.
+For key modifiers, the separator should be omitted:
 
 > **Vue<span></span>.js:**
 ```html
@@ -234,7 +238,7 @@ For key modifiers, the separator should be omitted.
 <input vOn$keyup13$prevent="submit" />
 ```
 
-As noted above, the value of the `vOn` attribute *must* be the name of a function. The following example from the Vue<span></span>.js docs *will not* work:
+As noted above, the value of the `vOn` attribute *must* be the name of a function. The following example from the Vue<span></span>.js docs **will not** work:
 
 ```js
 <button v-on$click="counter += 1">
@@ -245,12 +249,19 @@ As noted above, the value of the `vOn` attribute *must* be the name of a functio
 You must pass the name of a function, which will be called with the triggered `event`.
 
 ```js
-// in the class body (with transform-class-properties):
-addOne = event => this.setState({ counter: this.state.counter + 1 })
-
-// in the render function:
-<button vOn$click="addOne">
-	Add 1
-</button>
+import React, { Component } from 'react';
+export default class Counter extends Component {
+	state = {
+		counter: 0
+	};
+	
+	increment = event => this.setState({ counter: this.state.counter + 1});
+	
+	render() {
+		return (
+			<button vOn$click="increment">Increment</button>
+		);
+	}
+}
 ```
 
