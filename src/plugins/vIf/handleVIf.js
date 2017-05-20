@@ -83,19 +83,15 @@ export default function handleVIf(t, path, vIf) {
 
 	if (Array.isArray(container)) {
 		// remove elseIfs and else_ nodes
-		for (let i = 0; i < path.parentPath.get('children').length; i++) {
-			const containerPath = path.parentPath.get('children')[i];
+		path.parentPath.get('children').forEach(containerPath => {
 			if (elseIfs.includes(containerPath.node)) {
 				containerPath.remove();
-				i -= 1;
 			} else if (else_ === containerPath.node) {
 				containerPath.remove();
-				i -= 1;
 			} else if (texts.includes(containerPath.node)) {
 				containerPath.remove();
-				i -= 1;
 			}
-		}
+		});
 	}
 }
 

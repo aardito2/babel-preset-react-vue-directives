@@ -13,6 +13,7 @@
 		"no-plusplus": ["error", { "allowForLoopAfterthoughts": true }],
 		"no-console": ["error", { allow: ["warn", "error"] }],
 		"no-bitwise": ["error", { "allow": ["~"] }],
-		"no-unused-expressions": ["error", { "allowShortCircuit": true }]
+		"no-unused-expressions": ["error", { "allowShortCircuit": true }],
+		"arrow-parens": ["error", "as-needed"]
 	}
 }

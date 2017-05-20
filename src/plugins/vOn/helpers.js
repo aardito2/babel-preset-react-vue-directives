@@ -68,7 +68,7 @@ function replaceVOnAttribute(t, path, eventType, modifiers) {
 		if (buttonModifiers.length) {
 			let button;
 
-			buttonModifiers.forEach((bm) => {
+			buttonModifiers.forEach(bm => {
 				switch (bm) {
 					case 'left':
 						button = 1;
@@ -91,14 +91,14 @@ function replaceVOnAttribute(t, path, eventType, modifiers) {
 	if (isKeyboardEvent(eventType)) {
 		const keyAliasMods = modifiers.filter(mod => keyAliases[mod]);
 		if (keyAliasMods.length) {
-			keyAliasMods.forEach((kam) => {
+			keyAliasMods.forEach(kam => {
 				conditions.push(`(event.keyCode === ${keyAliases[kam]})`);
 			});
 		}
 
 		const keycodeMods = modifiers.filter(mod => String(parseInt(mod, 10)) === mod);
 		if (keycodeMods.length) {
-			keycodeMods.forEach((kcm) => {
+			keycodeMods.forEach(kcm => {
 				conditions.push(`(event.keyCode === ${parseInt(kcm, 10)})`);
 			});
 		}
@@ -106,7 +106,7 @@ function replaceVOnAttribute(t, path, eventType, modifiers) {
 
 	const modifierKeyMods = modifiers.filter(mod => modifierKeys.includes(mod));
 	if (modifierKeyMods.length) {
-		modifierKeyMods.forEach((mkm) => {
+		modifierKeyMods.forEach(mkm => {
 			conditions.push(`(event.${mkm}Key)`);
 		});
 	}
