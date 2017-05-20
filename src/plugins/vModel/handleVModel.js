@@ -1,8 +1,12 @@
 import createSetStateArg from './helpers';
 import removeAttributeVisitor from '../shared/removeAttributeVisitor';
 
-export default function handleVModel(t, path, vModel) {
+export default function handleVModel(t, path, vModel, isJSXExpressionContainer = false) {
 	const name = vModel.name.name.split('$').slice(1);
+	const value = isJSXExpressionContainer ?
+		vModel.value.expression.name :
+		vModel.value.value;
+
 	const hasLazy = name.includes('lazy');
 	const hasNumber = name.includes('number');
 	const hasTrim = name.includes('trim');
@@ -45,7 +49,7 @@ export default function handleVModel(t, path, vModel) {
 							t.ThisExpression(),
 							t.Identifier('setState'),
 						),
-						[createSetStateArg(hasNumber, hasTrim, vModel.value.value, eventProp, t)],
+						[createSetStateArg(hasNumber, hasTrim, value, eventProp, t)],
 					),
 				),
 			),
@@ -61,7 +65,7 @@ export default function handleVModel(t, path, vModel) {
 						t.ThisExpression(),
 						t.Identifier('state'),
 					),
-					t.Identifier(vModel.value.value),
+					t.Identifier(value),
 				),
 			),
 		),

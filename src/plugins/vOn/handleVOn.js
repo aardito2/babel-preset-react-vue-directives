@@ -7,10 +7,14 @@ import {
 import { unique } from '../shared/util';
 import errorVisitor from '../shared/errorVisitor';
 
-export default function handleVOn(t, path, vOn) {
+export default function handleVOn(t, path, vOn, isJSXExpressionContainer = false) {
 	const attrName = vOn.name.name;
 	const firstSeparatorPos = attrName.indexOf('$');
 	const props = attrName.slice(firstSeparatorPos + 1).split('$');
+
+	const value = isJSXExpressionContainer ?
+		vOn.value.expression.name :
+		vOn.value.value;
 
 	let eventType = props[0];
 	let [...modifiers] = props.slice(1);
@@ -35,6 +39,6 @@ export default function handleVOn(t, path, vOn) {
 		}
 	}
 
-	path.traverse(attributeVisitor, { t, vOn, eventType, modifiers });
+	path.traverse(attributeVisitor, { t, vOn, eventType, modifiers, value });
 }
 

@@ -5,7 +5,7 @@ export default class CheckboxTest extends Component {
 
 	render() {
 		return (
-			<button vOn$click={handleClick} />
+			<button vOn$click$prevent$stop$left={handleClick} />
 		);
 	}
 }

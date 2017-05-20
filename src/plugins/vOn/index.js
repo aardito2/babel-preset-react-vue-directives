@@ -13,7 +13,10 @@ export default function ({ types: t }) {
 					if (vOn) {
 						if (t.isStringLiteral(vOn.value)) {
 							handleVOn(t, path, vOn);
-						} else {
+						} else if (t.isJSXExpressionContainer(vOn.value)) {
+							t.assertIdentifier(vOn.value.expression);
+							handleVOn(t, path, vOn, true);
+						}else {
 							errorVisitor(vOn, path, 'JSXAttribute', 'Invalid vOn attribute value; expected string literal');
 						}
 					}

@@ -13,8 +13,11 @@ export default function ({ types: t }) {
 					if (vModel) {
 						if (t.isStringLiteral(vModel.value)) {
 							handleVModel(t, path, vModel);
+						} else if (t.isJSXExpressionContainer(vModel.value)) {
+							t.assertIdentifier(vModel.value.expression);
+							handleVModel(t, path, vModel, true);
 						} else {
-							errorVisitor(vModel, path, 'JSXAttribute', 'Invalid vModel attribute value; expected string literal');
+							errorVisitor(vModel, path, 'JSXAttribute', 'Invalid vModel attribute value; expected string literal or curly brace expression containing an identifier');
 						}
 					}
 				}

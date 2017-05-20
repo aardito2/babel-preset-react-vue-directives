@@ -63,7 +63,7 @@ Please note the following differences from Vue<span></span>.js:
 
 * `vFor` only supports string literals in the formats described [below](#vfor).
 * `vIf` and `vShow` support both curly brace expressions and string literals. String literals can only contain identifiers.
-* `vModel` and `vOn` only support string literals containing an identifier. For `vModel`, this should be the name of a top-level property on `this.state`; for `vOn` it should be the name of an in-scope function.
+* `vModel` and `vOn` support both string literals and curly brace expressions containing an identifier. For `vModel`, the identifier should be the name of a property on `this.state`; for `vOn` it should be the name of an in-scope function. If using a nested property for `vModel`, only a string literal is supported.
 
 ### Supported directives:
 * `vFor`
@@ -210,7 +210,7 @@ export default class NestedStateComponent extends component {
 }
 ```
 
-The output code will use `Object.assign` as needed when calling `this.setState` to update the bound property.
+The output code will use `Object.assign` as needed when calling `this.setState` to update the bound property. Please note that when using a nested property, only a string literal is supported; a curly brace expression will not work.
 
 `vModel` supports the `lazy`, `trim`, and `number` modifiers. As with `vOn`, `$` should be used as a separator rather than `.`:
 

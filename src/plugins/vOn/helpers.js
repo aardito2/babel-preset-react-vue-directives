@@ -36,8 +36,8 @@ const mouseButtonModifiers = [
 	'middle',
 ];
 
-function replaceVOnAttribute(t, path, eventType, modifiers) {
-	const eventHandler = path.node.value.value;
+function replaceVOnAttribute(t, path, eventType, modifiers, value) {
+	const eventHandler = value;
 
 	let codeEventType = eventType[0].toUpperCase() + eventType.slice(1);
 
@@ -213,7 +213,7 @@ function validateModifier(eventType, modifier) {
 const attributeVisitor = {
 	JSXAttribute(path) {
 		if (path.node === this.vOn) {
-			replaceVOnAttribute(this.t, path, this.eventType, this.modifiers);
+			replaceVOnAttribute(this.t, path, this.eventType, this.modifiers, this.value);
 		}
 	},
 };
