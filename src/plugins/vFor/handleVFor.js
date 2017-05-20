@@ -1,5 +1,6 @@
 import cloneDeep from 'lodash.clonedeep';
 import removeAttributeVisitor from '../shared/removeAttributeVisitor';
+import errorVisitor from '../shared/errorVisitor';
 
 const arrOrObjTemplate = template => template(`Array.isArray(COLLECTION) ? 
 COLLECTION.map((ELEMENT_OR_VALUE, INDEX) => NODE_ARR) :
@@ -17,28 +18,29 @@ INDEX
 export default function handleVFor(t, path, vFor, template) {
 	const forVal = vFor.value.value;
 
-	let elementOrValue;
 	let collection;
 	let indexOrKey;
 	let index;
 
-	try {
-		[, elementOrValue, collection] = /^(\w+) (?:of|in) (\w+)$/.exec(forVal);
-	} catch (err) {} // eslint-disable-line no-empty
+	const re = /^(?:(\w+)|\((\w+), ?(\w+)\)|\((\w+), ?(\w+), ?(\w+)\)) (?:of|in) (\w+)$/;
 
-	if (!elementOrValue) {
-		try {
-			[, elementOrValue, indexOrKey, collection] = /^\((\w+), ?(\w+)\) (?:of|in) (\w+)$/.exec(forVal);
-		} catch (err) {} // eslint-disable-line no-empty
+	let match = forVal.match(re);
+
+	if (!match) {
+		errorVisitor(vFor, path, 'JSXAttribute', 'Invalid vFor format');
 	}
 
-	if (!elementOrValue) {
-		try {
-			[, elementOrValue, indexOrKey, index, collection] = /^\((\w+), ?(\w+), ?(\w+)\) (?:of|in) (\w+)$/.exec(forVal);
-		} catch (err) {} // eslint-disable-line no-empty
-	}
+	match = match.slice(1).filter(m => m);
 
-	if (!elementOrValue) return;
+	const elementOrValue = match[0];
+
+	if (match.length === 2) {
+		[, collection] = match;
+	} else if (match.length === 3) {
+		[, indexOrKey, collection] = match;
+	} else {
+		[, indexOrKey, index, collection] = match;
+	}
 
 	removeAttributeVisitor(path, vFor);
 
