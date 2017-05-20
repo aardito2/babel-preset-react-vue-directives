@@ -1,4 +1,6 @@
 __tests__
+coverage
 node_modules
 *.log
 src
+.tern-port
