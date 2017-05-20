@@ -1,8 +1,12 @@
+/* eslint-disable no-shadow */
+
 export default function (node, path, type, msg) {
 	return path.traverse({
 		[type](path) {
-			throw path.buildCodeFrameError(msg);
-		}
+			if (path.node === this.node) {
+				throw path.buildCodeFrameError(msg);
+			}
+		},
 	}, { node });
 }
 

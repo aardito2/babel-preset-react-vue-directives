@@ -1,5 +1,6 @@
 import syntaxJsx from 'babel-plugin-syntax-jsx';
 import handleVOn from './handleVOn';
+import errorVisitor from '../shared/errorVisitor';
 
 export default function ({ types: t }) {
 	return {
@@ -13,7 +14,7 @@ export default function ({ types: t }) {
 						if (t.isStringLiteral(vOn.value)) {
 							handleVOn(t, path, vOn);
 						} else {
-							return path.buildCodeFrameError('Invalid vOn attribute value; expected string literal');
+							errorVisitor(vOn, path, 'JSXAttribute', 'Invalid vOn attribute value; expected string literal');
 						}
 					}
 				}

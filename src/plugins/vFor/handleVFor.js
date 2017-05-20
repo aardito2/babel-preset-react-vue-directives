@@ -1,4 +1,5 @@
 import cloneDeep from 'lodash.clonedeep';
+import removeAttributeVisitor from '../shared/removeAttributeVisitor';
 
 const arrOrObjTemplate = template => template(`Array.isArray(COLLECTION) ? 
 COLLECTION.map((ELEMENT_OR_VALUE, INDEX) => NODE_ARR) :
@@ -39,8 +40,7 @@ export default function handleVFor(t, path, vFor, template) {
 
 	if (!elementOrValue) return;
 
-	path.node.openingElement.attributes = path.node.openingElement.attributes
-		.filter(attr => attr !== vFor);
+	removeAttributeVisitor(path, vFor);
 
 	let newNode;
 

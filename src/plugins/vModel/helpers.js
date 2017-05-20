@@ -1,6 +1,6 @@
 import { parse } from 'babylon';
 
-const stateTemplate = path => parse(`this.state${path ? '.' + path : ''}`).program.body[0].expression;
+const stateTemplate = path => parse(`this.state${path ? `.${path}` : ''}`).program.body[0].expression;
 
 function createEventExpression(hasNumber, hasTrim, eventProp, t) {
 	let val = t.MemberExpression(
@@ -8,7 +8,7 @@ function createEventExpression(hasNumber, hasTrim, eventProp, t) {
 			t.Identifier('event'),
 			t.Identifier('target'),
 		),
-		t.Identifier(eventProp)
+		t.Identifier(eventProp),
 	);
 
 	if (hasTrim) {
@@ -17,14 +17,14 @@ function createEventExpression(hasNumber, hasTrim, eventProp, t) {
 				val,
 				t.Identifier('trim'),
 			),
-			[]
+			[],
 		);
 	}
 
 	if (hasNumber) {
 		val = t.CallExpression(
 			t.Identifier('Number'),
-			[val]
+			[val],
 		);
 	}
 
@@ -32,13 +32,13 @@ function createEventExpression(hasNumber, hasTrim, eventProp, t) {
 }
 
 export default function createSetStateArg(hasNumber, hasTrim, identifier, eventProp, t, path = '') {
-	let keys = identifier.split('.');
+	const keys = identifier.split('.');
 
 	if (keys.length === 1 && path) {
 		return t.CallExpression(
 			t.MemberExpression(
 				t.Identifier('Object'),
-				t.Identifier('assign')
+				t.Identifier('assign'),
 			),
 			[
 				t.ObjectExpression([]),
@@ -47,29 +47,29 @@ export default function createSetStateArg(hasNumber, hasTrim, identifier, eventP
 					[
 						t.ObjectProperty(
 							t.Identifier(keys[0]),
-							createEventExpression(hasNumber, hasTrim, eventProp, t)
-						)
-					]
-				)
-			]
+							createEventExpression(hasNumber, hasTrim, eventProp, t),
+						),
+					],
+				),
+			],
 		);
-	} 
+	}
 
 	if (keys.length === 1) {
 		return t.ObjectExpression(
 			[
 				t.ObjectProperty(
 					t.Identifier(keys[0]),
-					createEventExpression(hasNumber, hasTrim, eventProp, t)
-				)
+					createEventExpression(hasNumber, hasTrim, eventProp, t),
+				),
 			],
 		);
-	};
+	}
 
 	return t.CallExpression(
 		t.MemberExpression(
 			t.Identifier('Object'),
-			t.Identifier('assign')
+			t.Identifier('assign'),
 		),
 		[
 			t.ObjectExpression([]),
@@ -78,10 +78,10 @@ export default function createSetStateArg(hasNumber, hasTrim, identifier, eventP
 				[
 					t.ObjectProperty(
 						t.Identifier(keys[0]),
-						createSetStateArg(hasNumber, hasTrim, keys.slice(1).join('.'), eventProp, t, path ? `${path}.${keys[0]}` : keys[0])
-					)
-				]
-			)
-		]
+						createSetStateArg(hasNumber, hasTrim, keys.slice(1).join('.'), eventProp, t, path ? `${path}.${keys[0]}` : keys[0]),
+					),
+				],
+			),
+		],
 	);
 }

@@ -1,5 +1,6 @@
 import syntaxJsx from 'babel-plugin-syntax-jsx';
 import handleVModel from './handleVModel';
+import errorVisitor from '../shared/errorVisitor';
 
 export default function ({ types: t }) {
 	return {
@@ -13,7 +14,7 @@ export default function ({ types: t }) {
 						if (t.isStringLiteral(vModel.value)) {
 							handleVModel(t, path, vModel);
 						} else {
-							return path.buildCodeFrameError('Invalid vModel attribute value; expected string literal');
+							errorVisitor(vModel, path, 'JSXAttribute', 'Invalid vModel attribute value; expected string literal');
 						}
 					}
 				}

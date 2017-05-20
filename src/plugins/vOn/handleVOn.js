@@ -24,14 +24,14 @@ export default function handleVOn(t, path, vOn) {
 	}
 
 	if (!validateEventType(eventType)) {
-		return errorVisitor(vOn, path, 'JSXAttribute', 'Invalid event type');
+		errorVisitor(vOn, path, 'JSXAttribute', 'Invalid event type');
 	}
 
 	for (let i = 0; i < modifiers.length; i++) {
 		const isValid = validateModifier(eventType, modifiers[i]);
 
 		if (!isValid) {
-			return errorVisitor(vOn, path, 'JSXAttribute', 'Invalid event modifier');
+			errorVisitor(vOn, path, 'JSXAttribute', 'Invalid event modifier');
 		}
 	}
 

@@ -1,11 +1,11 @@
 import { createDisplayProp } from './helpers';
 import parseCondition from '../shared/parseCondition';
+import removeAttributeVisitor from '../shared/removeAttributeVisitor';
 
 export default function handleVShow(t, path, vShow) {
 	const condition = parseCondition(vShow, t);
 
-	path.node.openingElement.attributes = path.node.openingElement.attributes
-		.filter(attr => attr !== vShow);
+	removeAttributeVisitor(path, vShow);
 
 	const styleAttr = path.node.openingElement.attributes.find(attr => attr.name.name === 'style');
 	if (styleAttr) {

@@ -1,21 +1,29 @@
 import parseCondition from '../shared/parseCondition';
+import removeAttributeVisitor from '../shared/removeAttributeVisitor';
 
-function createTernary(t, elseIfs, else_) {
+function createTernary(path, t, elseIfs, else_) {
 	if (!elseIfs.length && !else_) {
 		return t.NullLiteral();
 	} else if (!elseIfs.length) {
-		else_.openingElement.attributes = else_.openingElement.attributes.filter(attr => attr.name.name !== 'vElse');
+		removeAttributeVisitor(
+			path.parentPath,
+			else_.openingElement.attributes.find(attr => attr.name.name === 'vElse'),
+		);
+
 		return else_;
 	}
 
 	const condition = getElseIfCondition(elseIfs[0], t);
 
-	elseIfs[0].openingElement.attributes = elseIfs[0].openingElement.attributes.filter(attr => attr.name.name !== 'vElseIf');
+	removeAttributeVisitor(
+		path.parentPath,
+		elseIfs[0].openingElement.attributes.find(attr => attr.name.name === 'vElseIf'),
+	);
 
 	return t.ConditionalExpression(
 		condition,
 		elseIfs[0],
-		createTernary(t, elseIfs.slice(1), else_),
+		createTernary(path, t, elseIfs.slice(1), else_),
 	);
 }
 

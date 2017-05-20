@@ -1,4 +1,5 @@
 import createSetStateArg from './helpers';
+import removeAttributeVisitor from '../shared/removeAttributeVisitor';
 
 export default function handleVModel(t, path, vModel) {
 	const name = vModel.name.name.split('$').slice(1);
@@ -11,8 +12,7 @@ export default function handleVModel(t, path, vModel) {
 	let eventProp = 'value';
 	let eventHandler = 'onInput';
 
-	path.node.openingElement.attributes = path.node.openingElement.attributes
-		.filter(attr => attr !== vModel);
+	removeAttributeVisitor(path, vModel);
 
 	if (hasLazy) {
 		eventHandler = 'onChange';
@@ -45,7 +45,7 @@ export default function handleVModel(t, path, vModel) {
 							t.ThisExpression(),
 							t.Identifier('setState'),
 						),
-						[createSetStateArg(hasNumber, hasTrim, vModel.value.value, eventProp, t)]
+						[createSetStateArg(hasNumber, hasTrim, vModel.value.value, eventProp, t)],
 					),
 				),
 			),

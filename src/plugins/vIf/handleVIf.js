@@ -1,5 +1,6 @@
 import { createTernary } from './helpers';
 import parseCondition from '../shared/parseCondition';
+import removeAttributeVisitor from '../shared/removeAttributeVisitor';
 
 export default function handleVIf(t, path, vIf) {
 	if (path.type !== 'JSXElement') {
@@ -54,14 +55,14 @@ export default function handleVIf(t, path, vIf) {
 	if (!path.node.openingElement) {
 		return;
 	}
-	path.node.openingElement.attributes = path.node.openingElement.attributes
-		.filter(attr => attr !== vIf);
+
+	removeAttributeVisitor(path, vIf);
 
 	let newNode = t.JSXExpressionContainer(
 		t.ConditionalExpression(
 			condition,
 			path.node,
-			createTernary(t, elseIfs, else_),
+			createTernary(path, t, elseIfs, else_),
 		),
 	);
 
@@ -81,14 +82,20 @@ export default function handleVIf(t, path, vIf) {
 	path.replaceWith(newNode);
 
 	if (Array.isArray(container)) {
-		path.container = container.filter((node) => {
-			if (~elseIfs.indexOf(node)) return false;
-			if (else_ === node) return false;
-
-			return !texts.includes(node);
-		});
-
-		path.parentPath.node.children = path.container;
+		// remove elseIfs and else_ nodes
+		for (let i = 0; i < path.parentPath.get('children').length; i++) {
+			const containerPath = path.parentPath.get('children')[i];
+			if (elseIfs.includes(containerPath.node)) {
+				containerPath.remove();
+				i -= 1;
+			} else if (else_ === containerPath.node) {
+				containerPath.remove();
+				i -= 1;
+			} else if (texts.includes(containerPath.node)) {
+				containerPath.remove();
+				i -= 1;
+			}
+		}
 	}
 }
 
