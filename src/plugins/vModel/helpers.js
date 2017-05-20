@@ -66,6 +66,17 @@ export default function createSetStateArg(hasNumber, hasTrim, identifier, eventP
 		);
 	}
 
+	if (!path) {
+		return t.ObjectExpression(
+			[
+				t.ObjectProperty(
+					t.Identifier(keys[0]),
+					createSetStateArg(hasNumber, hasTrim, keys.slice(1).join('.'), eventProp, t, path ? `${path}.${keys[0]}` : keys[0]),
+				),
+			],
+		);
+	}
+
 	return t.CallExpression(
 		t.MemberExpression(
 			t.Identifier('Object'),
