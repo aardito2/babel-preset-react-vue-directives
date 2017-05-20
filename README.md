@@ -13,10 +13,10 @@ Refer to the [Vue.js docs](https://vuejs.org/v2/api/#Directives) for more inform
 * [String literals vs expressions](#string-literals-vs-expressions)
 * [Supported directives](#supported-directives)
 * [`vFor`](#vfor)
-* [`vIf`](#vif)
-* [`vShow`](#vshow)
-* [`vModel`](#vmodel)
-* [`vOn`](#von)
+* [`vIf`](#vif-)
+* [`vShow`](#vshow-)
+* [`vModel`](#vmodel-)
+* [`vOn`](#von-)
 
 ## Installation
 
