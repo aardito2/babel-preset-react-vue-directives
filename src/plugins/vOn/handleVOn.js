@@ -25,6 +25,8 @@ export default function handleVOn(t, path, vOn, isJSXExpressionContainer = false
 	if (keyboardEventType && eventType.length > keyboardEventType.length) {
 		modifiers.push(eventType.slice(keyboardEventType.length));
 		eventType = keyboardEventType;
+	} else if (keyboardEventType) {
+		errorVisitor(vOn, path, 'JSXAttribute', 'Key event with no key code specified');
 	}
 
 	if (!validateEventType(eventType)) {
@@ -35,7 +37,7 @@ export default function handleVOn(t, path, vOn, isJSXExpressionContainer = false
 		const isValid = validateModifier(eventType, modifiers[i]);
 
 		if (!isValid) {
-			errorVisitor(vOn, path, 'JSXAttribute', 'Invalid event modifier');
+			errorVisitor(vOn, path, 'JSXAttribute', `Invalid event modifier: ${modifiers[i]}`);
 		}
 	}
 

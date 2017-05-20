@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 
-export default class CheckboxTest extends Component {
-	handleClick(event) {}
+export default class Test extends Component {
+	handleKeyPress(event) {}
 
 	render() {
 		return <button onKeyPress={event => {
 			if (event.keyCode === 13 && event.ctrlKey) {
-				handleClick(event);
+				handleKeyPress(event);
 			}
 		}} />;
 	}

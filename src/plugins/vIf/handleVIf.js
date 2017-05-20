@@ -3,10 +3,6 @@ import parseCondition from '../shared/parseCondition';
 import removeAttributeVisitor from '../shared/removeAttributeVisitor';
 
 export default function handleVIf(t, path, vIf) {
-	if (path.type !== 'JSXElement') {
-		return;
-	}
-
 	const { key, container } = path;
 
 	const condition = parseCondition(vIf, t);
@@ -50,10 +46,6 @@ export default function handleVIf(t, path, vIf) {
 			else_ = sibling;
 			break;
 		}
-	}
-
-	if (!path.node.openingElement) {
-		return;
 	}
 
 	removeAttributeVisitor(path, vIf);

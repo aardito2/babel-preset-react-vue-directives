@@ -1,5 +1,7 @@
 # babel-preset-react-vue-directives
 
+[![Build Status](https://travis-ci.org/aardito2/babel-preset-react-vue-directives.svg?branch=master)](https://travis-ci.org/aardito2/babel-preset-react-vue-directives) [![codecov](https://codecov.io/gh/aardito2/babel-preset-react-vue-directives/branch/master/graph/badge.svg)](https://codecov.io/gh/aardito2/babel-preset-react-vue-directives)
+
 Enables the usage of Vue<span></span>.js directives in React.
 
 Refer to the [Vue.js docs](https://vuejs.org/v2/api/#Directives) for more information on directives.

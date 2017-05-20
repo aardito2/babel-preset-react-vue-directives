@@ -148,10 +148,6 @@ function validateEventType(type) {
 		return true;
 	}
 
-	if (isKeyboardEvent(type)) {
-		return true;
-	}
-
 	return false;
 }
 
@@ -196,9 +192,7 @@ function validateModifier(eventType, modifier) {
 	}
 
 	if (isKeyboard) {
-		if (validKeyCodes.includes(modifier)) {
-			return true;
-		} else if (keyAliases[modifier]) {
+		if (keyAliases[modifier]) {
 			return true;
 		}
 	}

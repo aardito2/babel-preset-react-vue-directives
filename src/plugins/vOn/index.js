@@ -17,7 +17,7 @@ export default function ({ types: t }) {
 							t.assertIdentifier(vOn.value.expression);
 							handleVOn(t, path, vOn, true);
 						}else {
-							errorVisitor(vOn, path, 'JSXAttribute', 'Invalid vOn attribute value; expected string literal');
+							errorVisitor(vOn, path, 'JSXAttribute', 'Invalid vOn attribute value; expected string literal or curly brace expression containing an identifier');
 						}
 					}
 				}

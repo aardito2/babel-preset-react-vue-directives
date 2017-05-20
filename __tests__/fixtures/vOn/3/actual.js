@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 
-export default class CheckboxTest extends Component {
-	handleClick(event) {}
+export default class Test extends Component {
+	handleKeyPress(event) {}
 
 	render() {
 		return (
-			<button vOn$keyPress13$ctrl="handleClick" />
+			<button vOn$keyPress13$ctrl="handleKeyPress" />
 		);
 	}
 }
