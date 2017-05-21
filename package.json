@@ -33,7 +33,6 @@
     "babel-preset"
   ],
   "dependencies": {
-    "babel-generator": "^6.24.1",
     "babel-plugin-syntax-jsx": "^6.18.0",
     "babylon": "^6.17.1",
     "lodash.clonedeep": "^4.5.0"
