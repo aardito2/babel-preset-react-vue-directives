@@ -76,31 +76,27 @@ export default function handleVModel(
 		]),
 	));
 
-	path.node.openingElement.attributes.push(
-		t.JSXAttribute(
-			t.JSXIdentifier(eventHandler),
-			t.JSXExpressionContainer(
+	path.get('openingElement').pushContainer('attributes', t.JSXAttribute(
+		t.JSXIdentifier(eventHandler),
+		t.JSXExpressionContainer(
+			t.MemberExpression(
+				t.ThisExpression(),
+				t.Identifier(methodName),
+			),
+		),
+	));
+
+	path.get('openingElement').pushContainer('attributes', t.JSXAttribute(
+		t.JSXIdentifier(eventProp),
+		t.JSXExpressionContainer(
+			t.MemberExpression(
 				t.MemberExpression(
 					t.ThisExpression(),
-					t.Identifier(methodName),
+					t.Identifier('state'),
 				),
+				t.Identifier(value),
 			),
 		),
-	);
-
-	path.node.openingElement.attributes.push(
-		t.JSXAttribute(
-			t.JSXIdentifier(eventProp),
-			t.JSXExpressionContainer(
-				t.MemberExpression(
-					t.MemberExpression(
-						t.ThisExpression(),
-						t.Identifier('state'),
-					),
-					t.Identifier(value),
-				),
-			),
-		),
-	);
+	));
 }
 

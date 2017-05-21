@@ -21,15 +21,13 @@ export default function handleVShow(t, path, vShow) {
 			styleProps.push(createDisplayProp(condition, t.NullLiteral(), t));
 		}
 	} else {
-		path.node.openingElement.attributes.push(
-			t.JSXAttribute(
-				t.JSXIdentifier('style'),
-				t.JSXExpressionContainer(
-					t.ObjectExpression([
-						createDisplayProp(condition, t.NullLiteral(), t),
-					]),
-				),
+		path.get('openingElement').pushContainer('attributes', t.JSXAttribute(
+			t.JSXIdentifier('style'),
+			t.JSXExpressionContainer(
+				t.ObjectExpression([
+					createDisplayProp(condition, t.NullLiteral(), t),
+				]),
 			),
-		);
+		));
 	}
 }

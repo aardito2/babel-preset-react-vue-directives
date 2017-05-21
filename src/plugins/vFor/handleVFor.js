@@ -79,12 +79,10 @@ export default function handleVFor(t, path, vFor, template) {
 		);
 
 		if (!path.node.openingElement.attributes.find(attr => attr.name.name === 'key')) {
-			path.node.openingElement.attributes.push(
-				t.JSXAttribute(
-					t.JSXIdentifier('key'),
-					t.JSXExpressionContainer(nodeKey),
-				),
-			);
+			path.get('openingElement').pushContainer('attributes', t.JSXAttribute(
+				t.JSXIdentifier('key'),
+				t.JSXExpressionContainer(nodeKey)
+			));
 		}
 
 		result = arrOrObjTemplate(template)({
@@ -96,14 +94,12 @@ export default function handleVFor(t, path, vFor, template) {
 			NODE_OBJ: cloneDeep(path.node),
 		});
 	} else {
-		path.node.openingElement.attributes.push(
-			t.JSXAttribute(
-				t.JSXIdentifier('key'),
-				t.JSXExpressionContainer(
-					t.identifier(indexOrKey),
-				),
+		path.get('openingElement').pushContainer('attributes', t.JSXAttribute(
+			t.JSXIdentifier('key'),
+			t.JSXExpressionContainer(
+				t.identifier(indexOrKey),
 			),
-		);
+		));
 
 		result = objTemplate(template)({
 			ELEMENT_OR_VALUE: t.identifier(elementOrValue),
