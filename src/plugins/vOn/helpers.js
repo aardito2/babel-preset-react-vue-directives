@@ -113,10 +113,10 @@ function replaceVOnAttribute(t, path, eventType, modifiers, value) {
 
 	if (conditions.length) {
 		sourceString += `if (${conditions.join(' && ')}) {`;
-		sourceString += `${eventHandler}(event);`;
+		sourceString += `(${eventHandler})(event);`;
 		sourceString += '} ';
 	} else {
-		sourceString += `${eventHandler}(event);`;
+		sourceString += `(${eventHandler})(event);`;
 	}
 
 	sourceString += '}';

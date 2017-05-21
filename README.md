@@ -58,13 +58,14 @@ Please note the following differences from Vue<span></span>.js:
 * Directive modifiers use `$` as a separator rather than `:` and `.`.
 * `vOn` only supports named functions.
 * `vOn` does not support the `self` and `once` event modifiers.
-* `vModel` supports binding to nested properties on state - see [below](#vmodel) for an example.
+* `vModel` supports binding to nested properties on state - see [below](#vmodel-) for an example.
 
 ## String literals vs expressions
 
 * `vFor` only supports string literals in the formats described [below](#vfor).
 * `vIf` and `vShow` support both curly brace expressions and string literals. String literals can only contain identifiers.
 * `vModel` and `vOn` support both string literals and curly brace expressions containing an identifier. For `vModel`, the identifier should be the name of a property on `this.state`; for `vOn` it should be the name of an in-scope function. If using a nested property for `vModel`, only a string literal is supported.
+* `vOn` *also* supports curly brace expressions containing a function.
 
 ### Supported directives:
 * `vFor`
@@ -240,7 +241,7 @@ As noted above, the value of the `vOn` attribute *must* be the name of a functio
 </button>
 ```
 
-You must pass the name of a function, which will be called with the triggered `event`.
+You must pass either the name of a function or a curly brace expression containing the function itself, which will be called with the triggered `event`.
 
 ```js
 import React, { Component } from 'react';
@@ -253,7 +254,10 @@ export default class Counter extends Component {
 	
 	render() {
 		return (
-			<button vOn$click="increment">Increment</button>
+			<div>
+				<button vOn$click="increment">Increment</button>
+				<button vOn$click={event => this.setState({ counter: this.state.counter + 1 })}>Increment</button>
+			</div>
 		);
 	}
 }

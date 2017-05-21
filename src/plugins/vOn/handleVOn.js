@@ -1,3 +1,4 @@
+import generate from 'babel-generator';
 import {
 	isKeyboardEvent,
 	validateEventType,
@@ -12,9 +13,17 @@ export default function handleVOn(t, path, vOn, isJSXExpressionContainer = false
 	const firstSeparatorPos = attrName.indexOf('$');
 	const props = attrName.slice(firstSeparatorPos + 1).split('$');
 
-	const value = isJSXExpressionContainer ?
-		vOn.value.expression.name :
-		vOn.value.value;
+	let value;
+
+	if (isJSXExpressionContainer) {
+		if (t.isIdentifier(vOn.value.expression)) {
+			value = vOn.value.expression.name;
+		} else {
+			value = generate(vOn.value.expression).code;
+		}
+	} else {
+		value = vOn.value.value;
+	}
 
 	let eventType = props[0];
 	let [...modifiers] = props.slice(1);
