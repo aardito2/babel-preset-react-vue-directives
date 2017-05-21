@@ -2,10 +2,10 @@ import {
 	isKeyboardEvent,
 	validateEventType,
 	validateModifier,
-	attributeVisitor,
+	replaceVOnAttribute,
 } from './helpers';
 import { unique } from '../shared/util';
-import errorVisitor from '../shared/errorVisitor';
+import { throwAttributeError } from '../shared';
 
 export default function handleVOn(t, path, classBodyPath, vOn, isJSXExpressionContainer = false) {
 	const attrName = vOn.name.name;
@@ -30,21 +30,28 @@ export default function handleVOn(t, path, classBodyPath, vOn, isJSXExpressionCo
 		modifiers.push(eventType.slice(keyboardEventType.length));
 		eventType = keyboardEventType;
 	} else if (keyboardEventType) {
-		errorVisitor(vOn, path, 'JSXAttribute', 'Key event with no key code specified');
+		throwAttributeError(path, vOn, 'Key event with no key code specified');
 	}
 
 	if (!validateEventType(eventType)) {
-		errorVisitor(vOn, path, 'JSXAttribute', 'Invalid event type');
+		throwAttributeError(path, vOn, 'Invalid event type for vOn');
 	}
 
 	for (let i = 0; i < modifiers.length; i++) {
 		const isValid = validateModifier(eventType, modifiers[i]);
 
 		if (!isValid) {
-			errorVisitor(vOn, path, 'JSXAttribute', `Invalid event modifier: ${modifiers[i]}`);
+			throwAttributeError(path, vOn, `Invalid event modifier for vOn: ${modifiers[i]}`);
 		}
 	}
 
-	path.traverse(attributeVisitor, { t, vOn, classBodyPath, eventType, modifiers, value });
+	replaceVOnAttribute(
+		t,
+		path.get('openingElement').get('attributes').find(p => p.node === vOn),
+		classBodyPath,
+		eventType,
+		modifiers,
+		value,
+	);
 }
 

@@ -1,6 +1,6 @@
 import syntaxJsx from 'babel-plugin-syntax-jsx';
 import handleVFor from './handleVFor';
-import errorVisitor from '../shared/errorVisitor';
+import { throwAttributeError } from '../shared';
 
 export default function ({ types: t, template }) {
 	return {
@@ -14,7 +14,7 @@ export default function ({ types: t, template }) {
 						if (t.isStringLiteral(vFor.value)) {
 							handleVFor(t, path, vFor, template);
 						} else {
-							errorVisitor(vFor, path, 'JSXAttribute', 'Invalid vFor attribute value; expected string literal');
+							throwAttributeError(path, vFor, 'Invalid vFor attribute value; expected string literal');
 						}
 					}
 				}

@@ -1,6 +1,5 @@
 import cloneDeep from 'lodash.clonedeep';
-import removeAttributeVisitor from '../shared/removeAttributeVisitor';
-import errorVisitor from '../shared/errorVisitor';
+import { removeAttributeVisitor, throwAttributeError } from '../shared';
 
 const arrOrObjTemplate = template => template(`Array.isArray(COLLECTION) ? 
 COLLECTION.map((ELEMENT_OR_VALUE, INDEX) => NODE_ARR) :
@@ -27,7 +26,7 @@ export default function handleVFor(t, path, vFor, template) {
 	let match = forVal.match(re);
 
 	if (!match) {
-		errorVisitor(vFor, path, 'JSXAttribute', 'Invalid vFor format');
+		throwAttributeError(path, vFor, 'Invalid vFor format');
 	}
 
 	match = match.slice(1).filter(m => m);
@@ -81,7 +80,7 @@ export default function handleVFor(t, path, vFor, template) {
 		if (!path.node.openingElement.attributes.find(attr => attr.name.name === 'key')) {
 			path.get('openingElement').pushContainer('attributes', t.JSXAttribute(
 				t.JSXIdentifier('key'),
-				t.JSXExpressionContainer(nodeKey)
+				t.JSXExpressionContainer(nodeKey),
 			));
 		}
 

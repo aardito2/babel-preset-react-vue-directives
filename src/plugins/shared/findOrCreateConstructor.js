@@ -3,8 +3,10 @@ export default function findOrCreateConstructor(classBodyPath, t) {
 
 	classBodyPath.traverse({
 		ClassMethod(path) {
+			path.skip();
 			if (path.node.kind === 'constructor') {
 				this.path = path;
+				path.stop();
 			}
 		},
 	}, constructor);

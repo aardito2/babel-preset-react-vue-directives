@@ -1,8 +1,10 @@
 import createSetStateArg from './helpers';
 import { capitalize } from '../shared/util';
-import removeAttributeVisitor from '../shared/removeAttributeVisitor';
-import findOrCreateConstructor from '../shared/findOrCreateConstructor';
-import bindMethodInConstructor from '../shared/bindMethodInConstructor';
+import {
+	removeAttributeVisitor,
+	findOrCreateConstructor,
+	bindMethodInConstructor,
+} from '../shared';
 
 export default function handleVModel(
 	t,
@@ -51,9 +53,7 @@ export default function handleVModel(
 
 	let methodName = eventHandler.replace('on', 'handle');
 	methodName += value[0].toUpperCase();
-	methodName += value.slice(1).split('.').map((str, i) => {
-		return i ? capitalize(str) : str;
-	}).join('');
+	methodName += value.slice(1).split('.').map((str, i) => (i ? capitalize(str) : str)).join('');
 
 	methodName = classBodyPath.scope.generateUidIdentifier(methodName).name;
 

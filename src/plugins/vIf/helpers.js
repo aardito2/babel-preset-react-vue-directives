@@ -1,5 +1,4 @@
-import parseCondition from '../shared/parseCondition';
-import removeAttributeVisitor from '../shared/removeAttributeVisitor';
+import { parseCondition, removeAttributeVisitor } from '../shared';
 
 function createTernary(path, t, elseIfs, else_) {
 	if (!elseIfs.length && !else_) {

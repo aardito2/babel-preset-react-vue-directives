@@ -1,6 +1,5 @@
 import { createTernary } from './helpers';
-import parseCondition from '../shared/parseCondition';
-import removeAttributeVisitor from '../shared/removeAttributeVisitor';
+import { parseCondition, removeAttributeVisitor } from '../shared';
 
 export default function handleVIf(t, path, vIf) {
 	const { key, container } = path;

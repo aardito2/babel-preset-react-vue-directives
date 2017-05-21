@@ -1,6 +1,5 @@
 import { createDisplayProp } from './helpers';
-import parseCondition from '../shared/parseCondition';
-import removeAttributeVisitor from '../shared/removeAttributeVisitor';
+import { parseCondition, removeAttributeVisitor } from '../shared';
 
 export default function handleVShow(t, path, vShow) {
 	const condition = parseCondition(vShow, t);

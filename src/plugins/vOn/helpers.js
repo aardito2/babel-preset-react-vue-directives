@@ -2,8 +2,7 @@ import { parse } from 'babylon';
 import validEventTypes, { mouseEventTypes } from './eventTypes';
 import validKeyCodes from './keyCodes';
 import { capitalize } from '../shared/util';
-import findOrCreateConstructor from '../shared/findOrCreateConstructor';
-import bindMethodInConstructor from '../shared/bindMethodInConstructor';
+import { findOrCreateConstructor, bindMethodInConstructor } from '../shared';
 
 const validModifiers = [
 	'stop',
@@ -221,26 +220,10 @@ function validateModifier(eventType, modifier) {
 	return false;
 }
 
-const attributeVisitor = {
-	JSXAttribute(path) {
-		if (path.node === this.vOn) {
-			replaceVOnAttribute(
-				this.t,
-				path,
-				this.classBodyPath,
-				this.eventType,
-				this.modifiers,
-				this.value,
-				this.valueIsIdentifier,
-			);
-		}
-	},
-};
-
 export {
 	isKeyboardEvent,
 	validateEventType,
 	validateModifier,
-	attributeVisitor,
+	replaceVOnAttribute,
 };
 
