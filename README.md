@@ -267,3 +267,28 @@ export default class Counter extends Component {
 	}
 }
 ```
+
+# Development
+
+## Test
+
+```sh
+npm test
+```
+
+```sh
+npm run test:watch
+```
+
+## Lint
+
+```sh
+npm run lin
+```
+
+## Build
+
+```sh
+npm run build
+```
+
