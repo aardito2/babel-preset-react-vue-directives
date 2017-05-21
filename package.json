@@ -22,7 +22,7 @@
   "scripts": {
     "clean": "rm -rf lib",
     "build": "babel src -d lib",
-    "test": "jest __tests__/index.js",
+    "test": "jest __tests__/*.js",
     "test:watch": "npm run test -- --watch",
     "prepublish": "npm run clean && npm run build",
     "lint": "eslint_d src/**"

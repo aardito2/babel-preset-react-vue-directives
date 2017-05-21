@@ -6,12 +6,18 @@ export default class Test extends Component {
 		this.state = {
 			inputValue: ''
 		};
+		this._handleInputInputValue = this._handleInputInputValue.bind(this);
 	}
 
 	render() {
-		return <input onInput={event => this.setState({
-			inputValue: event.target.value
-		})} value={this.state.inputValue} />;
+		return <input onInput={this._handleInputInputValue} value={this.state.inputValue} />;
 	}
+
+	_handleInputInputValue(event) {
+		this.setState({
+			inputValue: event.target.value
+		});
+	}
+
 }
 

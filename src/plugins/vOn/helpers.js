@@ -1,6 +1,9 @@
 import { parse } from 'babylon';
 import validEventTypes, { mouseEventTypes } from './eventTypes';
 import validKeyCodes from './keyCodes';
+import { capitalize } from '../shared/util';
+import findOrCreateConstructor from '../shared/findOrCreateConstructor';
+import bindMethodInConstructor from '../shared/bindMethodInConstructor';
 
 const validModifiers = [
 	'stop',
@@ -36,10 +39,16 @@ const mouseButtonModifiers = [
 	'middle',
 ];
 
-function replaceVOnAttribute(t, path, eventType, modifiers, value) {
+function replaceVOnAttribute(t, path, classBodyPath, eventType, modifiers, value) {
+	const constructorPath = findOrCreateConstructor(classBodyPath, t);
+
+	const methodName = classBodyPath.scope.generateUidIdentifier(value).name;
+
+	bindMethodInConstructor(constructorPath, methodName, t);
+
 	const eventHandler = value;
 
-	let codeEventType = eventType[0].toUpperCase() + eventType.slice(1);
+	let codeEventType = capitalize(eventType);
 
 	if (path.parentPath.node.attributes.find(attr => attr.name.name === `on${codeEventType}`)) {
 		throw path.buildCodeFrameError(`Node already has ${codeEventType} handler`);
@@ -53,7 +62,7 @@ function replaceVOnAttribute(t, path, eventType, modifiers, value) {
 		codeEventType += 'Capture';
 	}
 
-	let sourceString = 'event => {';
+	let sourceString = '';
 
 	if (modifiers.includes('prevent')) {
 		sourceString += 'event.preventDefault();';
@@ -113,20 +122,28 @@ function replaceVOnAttribute(t, path, eventType, modifiers, value) {
 
 	if (conditions.length) {
 		sourceString += `if (${conditions.join(' && ')}) {`;
-		sourceString += `(${eventHandler})(event);`;
+		sourceString += `this.${eventHandler}(event);`;
 		sourceString += '} ';
 	} else {
-		sourceString += `(${eventHandler})(event);`;
+		sourceString += `this.${eventHandler}(event);`;
 	}
-
-	sourceString += '}';
 
 	const newNode = t.JSXAttribute(
 		t.JSXIdentifier(codeEventType),
 		t.JSXExpressionContainer(
-			parse(sourceString).program.body[0].expression,
+			t.MemberExpression(
+				t.ThisExpression(),
+				t.Identifier(methodName),
+			),
 		),
 	);
+
+	classBodyPath.pushContainer('body', t.ClassMethod(
+		'method',
+		t.Identifier(methodName),
+		[t.Identifier('event')],
+		t.BlockStatement(parse(sourceString).program.body),
+	));
 
 	path.replaceWith(newNode);
 }
@@ -207,7 +224,15 @@ function validateModifier(eventType, modifier) {
 const attributeVisitor = {
 	JSXAttribute(path) {
 		if (path.node === this.vOn) {
-			replaceVOnAttribute(this.t, path, this.eventType, this.modifiers, this.value);
+			replaceVOnAttribute(
+				this.t,
+				path,
+				this.classBodyPath,
+				this.eventType,
+				this.modifiers,
+				this.value,
+				this.valueIsIdentifier,
+			);
 		}
 	},
 };

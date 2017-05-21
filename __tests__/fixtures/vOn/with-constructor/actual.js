@@ -3,18 +3,15 @@ import React, { Component } from 'react';
 export default class Test extends Component {
 	constructor(props) {
 		super(props);
-		this._handleClick = this._handleClick.bind(this);
+		this.handleClick = this.handleClick.bind(this);
 	}
 
 	handleClick(event) {}
 
 	render() {
-		return <button onClick={this._handleClick} />;
+		return (
+			<button vOn$click="handleClick" />
+		);
 	}
-
-	_handleClick(event) {
-		this.handleClick(event);
-	}
-
 }
 

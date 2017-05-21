@@ -6,12 +6,18 @@ export default class Test extends Component {
 		this.state = {
 			isChecked: false
 		};
+		this._handleChangeIsChecked = this._handleChangeIsChecked.bind(this);
 	}
 
 	render() {
-		return <input type="checkbox" onChange={event => this.setState({
-			isChecked: event.target.checked
-		})} checked={this.state.isChecked} />;
+		return <input type="checkbox" onChange={this._handleChangeIsChecked} checked={this.state.isChecked} />;
 	}
+
+	_handleChangeIsChecked(event) {
+		this.setState({
+			isChecked: event.target.checked
+		});
+	}
+
 }
 

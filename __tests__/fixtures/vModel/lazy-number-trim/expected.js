@@ -6,12 +6,18 @@ export default class Test extends Component {
 		this.state = {
 			inputValue: ''
 		};
+		this._handleChangeInputValue = this._handleChangeInputValue.bind(this);
 	}
 
 	render() {
-		return <input onChange={event => this.setState({
-			inputValue: Number(event.target.value.trim())
-		})} value={this.state.inputValue} />;
+		return <input onChange={this._handleChangeInputValue} value={this.state.inputValue} />;
 	}
+
+	_handleChangeInputValue(event) {
+		this.setState({
+			inputValue: Number(event.target.value.trim())
+		});
+	}
+
 }
 

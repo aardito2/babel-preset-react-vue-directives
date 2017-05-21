@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 export default class Test extends Component {
 	constructor(props) {
 		super(props);
+		this.handleClick = this.handleClick.bind(this);
 		this._handleClick = this._handleClick.bind(this);
 	}
 
@@ -13,9 +14,7 @@ export default class Test extends Component {
 	}
 
 	_handleClick(event) {
-		event.preventDefault();event.stopPropagation();if (event.buttons & 2) {
-			this.handleClick(event);
-		}
+		this.handleClick(event);
 	}
 
 }

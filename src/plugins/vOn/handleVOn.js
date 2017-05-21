@@ -1,4 +1,3 @@
-import generate from 'babel-generator';
 import {
 	isKeyboardEvent,
 	validateEventType,
@@ -8,7 +7,7 @@ import {
 import { unique } from '../shared/util';
 import errorVisitor from '../shared/errorVisitor';
 
-export default function handleVOn(t, path, vOn, isJSXExpressionContainer = false) {
+export default function handleVOn(t, path, classBodyPath, vOn, isJSXExpressionContainer = false) {
 	const attrName = vOn.name.name;
 	const firstSeparatorPos = attrName.indexOf('$');
 	const props = attrName.slice(firstSeparatorPos + 1).split('$');
@@ -16,11 +15,7 @@ export default function handleVOn(t, path, vOn, isJSXExpressionContainer = false
 	let value;
 
 	if (isJSXExpressionContainer) {
-		if (t.isIdentifier(vOn.value.expression)) {
-			value = vOn.value.expression.name;
-		} else {
-			value = generate(vOn.value.expression).code;
-		}
+		value = vOn.value.expression.name;
 	} else {
 		value = vOn.value.value;
 	}
@@ -50,6 +45,6 @@ export default function handleVOn(t, path, vOn, isJSXExpressionContainer = false
 		}
 	}
 
-	path.traverse(attributeVisitor, { t, vOn, eventType, modifiers, value });
+	path.traverse(attributeVisitor, { t, vOn, classBodyPath, eventType, modifiers, value });
 }
 

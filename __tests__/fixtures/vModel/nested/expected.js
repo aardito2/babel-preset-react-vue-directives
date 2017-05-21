@@ -12,10 +12,15 @@ export default class Test extends Component {
 				}
 			}
 		};
+		this._handleInputABCInputValue = this._handleInputABCInputValue.bind(this);
 	}
 
 	render() {
-		return <input onInput={event => this.setState({
+		return <input onInput={this._handleInputABCInputValue} value={this.state.a.b.c.inputValue} />;
+	}
+
+	_handleInputABCInputValue(event) {
+		this.setState({
 			a: Object.assign({}, this.state.a, {
 				b: Object.assign({}, this.state.a.b, {
 					c: Object.assign({}, this.state.a.b.c, {
@@ -23,7 +28,8 @@ export default class Test extends Component {
 					})
 				})
 			})
-		})} value={this.state.a.b.c.inputValue} />;
+		});
 	}
+
 }
 

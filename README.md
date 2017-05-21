@@ -64,8 +64,7 @@ Please note the following differences from Vue<span></span>.js:
 
 * `vFor` only supports string literals in the formats described [below](#vfor).
 * `vIf` and `vShow` support both curly brace expressions and string literals. String literals can only contain identifiers.
-* `vModel` and `vOn` support both string literals and curly brace expressions containing an identifier. For `vModel`, the identifier should be the name of a property on `this.state`; for `vOn` it should be the name of an in-scope function. If using a nested property for `vModel`, only a string literal is supported.
-* `vOn` *also* supports curly brace expressions containing a function.
+* `vModel` and `vOn` support both string literals and curly brace expressions containing an identifier. For `vModel`, the identifier should be the name of a property on `this.state`; for `vOn` it should be the name of a class method (**with `this` omitted**). If using a nested property for `vModel`, only a string literal is supported.
 
 ### Supported directives:
 * `vFor`
@@ -175,6 +174,8 @@ If the element already has a `display` property, it will be used when the condit
 
 Creates a two-way binding between a property on `this.state` and the value of a form element. `vModel` can be used on `<input>`, `<textarea>`, and `<select>` elements.
 
+**Requires a class component.**
+
 ### Example:
 
 ```js
@@ -219,6 +220,8 @@ The output code will use `Object.assign` as needed when calling `this.setState` 
 
 Adds event handlers. 
 
+**Requires a class component.**
+
 Since `:` and `.` cannot be used in JSX attribute names, `$` must be substituted for both.
 
 For key modifiers, the separator should be omitted:
@@ -233,7 +236,9 @@ For key modifiers, the separator should be omitted:
 <input vOn$keyup13$prevent="submit" />
 ```
 
-As noted above, the value of the `vOn` attribute *must* be the name of a function. The following example from the Vue<span></span>.js docs **will not** work:
+The value of the `vOn` attribute *must* be the name of a class method. **Omit `this` when specifiying the function.**
+
+The following example from the Vue<span></span>.js docs **will not** work:
 
 ```js
 <button v-on$click="counter += 1">
@@ -241,7 +246,7 @@ As noted above, the value of the `vOn` attribute *must* be the name of a functio
 </button>
 ```
 
-You must pass either the name of a function or a curly brace expression containing the function itself, which will be called with the triggered `event`.
+The function will be called with the triggered `event`.
 
 ```js
 import React, { Component } from 'react';

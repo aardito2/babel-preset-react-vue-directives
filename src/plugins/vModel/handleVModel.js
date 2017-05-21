@@ -1,7 +1,16 @@
 import createSetStateArg from './helpers';
+import { capitalize } from '../shared/util';
 import removeAttributeVisitor from '../shared/removeAttributeVisitor';
+import findOrCreateConstructor from '../shared/findOrCreateConstructor';
+import bindMethodInConstructor from '../shared/bindMethodInConstructor';
 
-export default function handleVModel(t, path, vModel, isJSXExpressionContainer = false) {
+export default function handleVModel(
+	t,
+	path,
+	classBodyPath,
+	vModel,
+	isJSXExpressionContainer = false,
+) {
 	const name = vModel.name.name.split('$').slice(1);
 	const value = isJSXExpressionContainer ?
 		vModel.value.expression.name :
@@ -38,19 +47,42 @@ export default function handleVModel(t, path, vModel, isJSXExpressionContainer =
 		eventHandler = 'onChange';
 	}
 
+	const constructorPath = findOrCreateConstructor(classBodyPath, t);
+
+	let methodName = eventHandler.replace('on', 'handle');
+	methodName += value[0].toUpperCase();
+	methodName += value.slice(1).split('.').map((str, i) => {
+		return i ? capitalize(str) : str;
+	}).join('');
+
+	methodName = classBodyPath.scope.generateUidIdentifier(methodName).name;
+
+	bindMethodInConstructor(constructorPath, methodName, t);
+
+	classBodyPath.pushContainer('body', t.ClassMethod(
+		'method',
+		t.Identifier(methodName),
+		[t.Identifier('event')],
+		t.BlockStatement([
+			t.ExpressionStatement(
+				t.CallExpression(
+					t.MemberExpression(
+						t.ThisExpression(),
+						t.Identifier('setState'),
+					),
+					[createSetStateArg(hasNumber, hasTrim, value, eventProp, t)],
+				),
+			),
+		]),
+	));
+
 	path.node.openingElement.attributes.push(
 		t.JSXAttribute(
 			t.JSXIdentifier(eventHandler),
 			t.JSXExpressionContainer(
-				t.ArrowFunctionExpression(
-					[t.identifier('event')],
-					t.CallExpression(
-						t.MemberExpression(
-							t.ThisExpression(),
-							t.Identifier('setState'),
-						),
-						[createSetStateArg(hasNumber, hasTrim, value, eventProp, t)],
-					),
+				t.MemberExpression(
+					t.ThisExpression(),
+					t.Identifier(methodName),
 				),
 			),
 		),
