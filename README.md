@@ -66,7 +66,7 @@ Please note the following differences from Vue<span></span>.js:
 * `vIf` and `vShow` support both curly brace expressions and string literals. String literals can only contain identifiers.
 * `vModel` and `vOn` support both string literals and curly brace expressions containing an identifier. For `vModel`, the identifier should be the name of a property on `this.state`; for `vOn` it should be the name of a class method (**with `this` omitted**). If using a nested property for `vModel`, only a string literal is supported.
 
-### Supported directives:
+## Supported directives:
 * `vFor`
 * `vIf`
 * `vElseIf`
