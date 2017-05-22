@@ -3,22 +3,17 @@ import {
 	validateEventType,
 	validateModifier,
 	replaceVOnAttribute,
+	convertVOnAttrToValue,
 } from './helpers';
 import { unique } from '../shared/util';
 import { throwAttributeError } from '../shared';
 
-export default function handleVOn(t, path, classBodyPath, vOn, isJSXExpressionContainer = false) {
+export default function handleVOn(t, path, classBodyPath, vOn) {
 	const attrName = vOn.name.name;
 	const firstSeparatorPos = attrName.indexOf('$');
 	const props = attrName.slice(firstSeparatorPos + 1).split('$');
 
-	let value;
-
-	if (isJSXExpressionContainer) {
-		value = vOn.value.expression.name;
-	} else {
-		value = vOn.value.value;
-	}
+	const value = convertVOnAttrToValue(vOn, path, t);
 
 	let eventType = props[0];
 	let [...modifiers] = props.slice(1);

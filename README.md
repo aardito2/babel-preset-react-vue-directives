@@ -236,7 +236,7 @@ For key modifiers, the separator should be omitted:
 <input vOn$keyup13$prevent="submit" />
 ```
 
-The value of the `vOn` attribute *must* be the name of a class method. **Omit `this` when specifiying the function.**
+The value of the `vOn` attribute *must* be the name of a method found on `this` or one of its properties (can be nested). **Omit `this` when specifiying the function.**
 
 The following example from the Vue<span></span>.js docs **will not** work:
 
@@ -247,6 +247,15 @@ The following example from the Vue<span></span>.js docs **will not** work:
 ```
 
 The function will be called with the triggered `event`.
+
+When using a method found on `this.props`, both of the following formats will work:
+
+```js
+<button vOn$click="props.handleClick" />
+<button vOn$click={props.handleClick} />
+```
+
+Both will use `this.props.handleClick` with the triggered `event`.
 
 ```js
 import React, { Component } from 'react';

@@ -2,7 +2,11 @@ import { parse } from 'babylon';
 import validEventTypes, { mouseEventTypes } from './eventTypes';
 import validKeyCodes from './keyCodes';
 import { capitalize } from '../shared/util';
-import { findOrCreateConstructor, bindMethodInConstructor } from '../shared';
+import {
+	findOrCreateConstructor,
+	bindMethodInConstructor,
+	throwAttributeError,
+} from '../shared';
 
 const validModifiers = [
 	'stop',
@@ -37,6 +41,32 @@ const mouseButtonModifiers = [
 	'right',
 	'middle',
 ];
+
+function convertVOnAttrToValue(vOn, path, t) {
+	if (t.isStringLiteral(vOn.value)) {
+		return vOn.value.value;
+	}
+
+	// handle JSXExpressionContainer identifier
+	if (t.isIdentifier(vOn.value.expression)) {
+		return vOn.value.expression.name;
+	}
+
+	// handle JSXExpressionContainer MemberExpression
+	return convertMemberExpressionToString(vOn.value.expression, path, vOn, t);
+}
+
+function convertMemberExpressionToString(mExp, path, errorNode, t) {
+	if (t.isIdentifier(mExp.object) && t.isIdentifier(mExp.property)) {
+		return `${mExp.object.name}.${mExp.property.name}`;
+	}
+
+	if (t.isMemberExpression(mExp.object)) {
+		return `${convertMemberExpressionToString(mExp.object, path, errorNode, t)}.${mExp.Property}`;
+	}
+
+	return throwAttributeError(path, errorNode, 'Invalid vOn attribute value');
+}
 
 function replaceVOnAttribute(t, path, classBodyPath, eventType, modifiers, value) {
 	const constructorPath = findOrCreateConstructor(classBodyPath, t);
@@ -225,5 +255,6 @@ export {
 	validateEventType,
 	validateModifier,
 	replaceVOnAttribute,
+	convertVOnAttrToValue,
 };
 

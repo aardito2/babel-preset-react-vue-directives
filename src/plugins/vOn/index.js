@@ -19,7 +19,8 @@ export default function ({ types: t }) {
 						if (t.isStringLiteral(vOn.value)) {
 							handleVOn(t, path, classBodyPath, vOn);
 						} else if (t.isJSXExpressionContainer(vOn.value) &&
-							t.isIdentifier(vOn.value.expression)) {
+							(t.isIdentifier(vOn.value.expression) ||
+							t.isMemberExpression(vOn.value.expression))) {
 							handleVOn(t, path, classBodyPath, vOn, true);
 						} else {
 							throwAttributeError(path, vOn, 'Invalid vOn attribute value; expected string literal or curly brace expression containing an identifier');
