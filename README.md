@@ -17,6 +17,7 @@ Refer to the [Vue.js docs](https://vuejs.org/v2/api/#Directives) for more inform
 * [`vShow`](#vshow-)
 * [`vModel`](#vmodel-)
 * [`vOn`](#von-)
+* [Development](#development)
 
 ## Installation
 
