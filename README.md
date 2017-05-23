@@ -27,6 +27,8 @@ $ npm install babel-preset-react-vue-directives
 
 ## Usage
 
+**Note:** `babel-preset-react-vue-directives` must be placed *after* any preset that transforms ES6 classes, such as `babel-preset-env` or `babel-preset-es2015`.
+
 ### Via `.babelrc` (Recommended)
 
 **.babelrc**

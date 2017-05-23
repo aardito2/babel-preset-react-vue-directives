@@ -8,7 +8,7 @@
 		"babel-loader": "^7.0.0",
 		"babel-preset-env": "^1.5.1",
 		"babel-preset-react": "^6.24.1",
-		"babel-preset-react-vue-directives": "^0.2.0",
+		"babel-preset-react-vue-directives": "^0.3.3",
 		"react": "^15.5.4",
 		"react-dom": "^15.5.4",
 		"react-router": "^4.1.1",
