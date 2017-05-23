@@ -1,0 +1,14 @@
+{
+	"presets": [
+		"babel-preset-react-vue-directives",
+		["env", {
+			"targets": {
+				"browsers": ["last 2 versions"]
+			},
+			"modules": false
+		}],
+		"react"
+	],
+	"passPerPreset": true
+}
+

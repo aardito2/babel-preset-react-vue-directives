@@ -1,6 +1,7 @@
-__tests__
+src
+example
 coverage
 node_modules
+__tests__
 *.log
-src
 .tern-port
