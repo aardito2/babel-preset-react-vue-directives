@@ -295,7 +295,7 @@ npm run test:watch
 ## Lint
 
 ```sh
-npm run lin
+npm run lint
 ```
 
 ## Build
