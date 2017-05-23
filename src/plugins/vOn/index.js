@@ -30,8 +30,8 @@ export default function ({ types: t }) {
 	return {
 		inherits: syntaxJsx,
 		visitor: {
-			ClassBody(path) {
-				path.traverse(elementVisitor, { t, classBodyPath: path });
+			ClassDeclaration(path) {
+				path.traverse(elementVisitor, { t, classBodyPath: path.get('body') });
 			},
 		},
 	};

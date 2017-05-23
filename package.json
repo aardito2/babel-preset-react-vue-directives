@@ -1,6 +1,6 @@
 {
 	"name": "babel-preset-react-vue-directives",
-	"version": "0.3.0",
+	"version": "0.3.2",
 	"description": "Vue directives in React",
 	"repository": "aardito2/babel-preset-react-vue-directives",
 	"author": "aardito2 <anthony.ardito@gmail.com>",
