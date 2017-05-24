@@ -35,21 +35,21 @@ $ npm install babel-preset-react-vue-directives
 
 ```json
 {
-  "presets": ["react-vue-directives", "react"]
+  "presets": ["react", "react-vue-directives"]
 }
 ```
 
 ### Via CLI
 
 ```sh
-$ babel --presets react-vue-directives,react script.js
+$ babel --presets react,react-vue-directives script.js
 ```
 
 ### Via Node API
 
 ```javascript
 require("babel-core").transform("code", {
-  presets: ["react-vue-directives", "react"]
+  presets: ["react", "react-vue-directives"]
 });
 ```
 
